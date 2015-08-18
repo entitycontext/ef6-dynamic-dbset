@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,9 +8,9 @@ using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-using Dynamic.Models;
+using DynamicDbSet.Models;
 
-namespace Dynamic.Database
+namespace DynamicDbSet.Database
 {
     public class EntityClassMap
     {
@@ -43,27 +44,67 @@ namespace Dynamic.Database
                 code += 
                     $@"
                     public class {name} : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
-                    {{
+                    {{                        
+                        [Key, Column(""{name}Id"")]
+                        public override long Id {{ get; set; }}
+
+                        [Column(""{name}TypeId"")]
+                        public override long TypeId {{ get; set; }}
                     }}
+
                     public class {name}Attribute : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
                     {{
+                        [Key, Column(""{name}AttributeId"")]
+                        public override long Id {{ get; set; }}
+
+                        [Column(""{name}TypeId"")]
+                        public override long TypeId {{ get; set; }}
+
+                        [Column(""{name}Id"")]
+                        public override long EntityId {{ get; set; }}
+
+                        [Column(""{name}RelationId"")]
+                        public override long? RelationId {{ get; set; }}
                     }}
+
                     public class {name}AttributeType : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
                     {{
+                        [Key, Column(""{name}AttributeTypeId"")]
+                        public override long Id {{ get; set; }}
+
+                        [Column(""{name}RelationTypeId"")]
+                        public override long? RelationTypeId {{ get; set; }}
                     }}
+
                     public class {name}Relation : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
                     {{
+                        [Key, Column(""{name}RelationId"")]
+                        public override long Id {{ get; set; }}
+
+                        [Column(""{name}Id"")]
+                        public override long EntityId {{ get; set; }}
+
+                        [Column(""{name}RelationTypeId"")]
+                        public override long RelationTypeId {{ get; set; }}
                     }}
+
                     public class {name}RelationType : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
                     {{
+                        [Key, Column(""{name}RelationTypeId"")]
+                        public override long Id {{ get; set; }}
                     }}
+
                     public class {name}Type : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
                     {{
+                        [Key, Column(""{name}TypeId"")]
+                        public override long Id {{ get; set; }}
                     }}";
             }
 
             code = 
                 $@"
+                using System.ComponentModel.DataAnnotations.Schema;
+
                 namespace {nameSpace} 
                 {{ 
                     {code} 
@@ -78,7 +119,8 @@ namespace Dynamic.Database
             var references = new MetadataReference[]
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(IEntity).Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(IEntity).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(ColumnAttribute).Assembly.Location)
             };
 
             var compilation = CSharpCompilation.Create(

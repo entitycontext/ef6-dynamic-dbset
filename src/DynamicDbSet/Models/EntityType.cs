@@ -2,21 +2,18 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Dynamic.Models
+namespace DynamicDbSet.Models
 {
-    public interface IEntityRelationType
+    public interface IEntityType
     {
         long Id { get; set; }
-        long ToClassId { get; set; }
         string Name { get; set; }
 
-        EntityClass ToClass { get; set; }
-
-        IEnumerable<IEntityRelation> Relations { get; }
+        IEnumerable<IEntity> Entities { get; }
     }
 
-    public abstract class EntityRelationType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        : IEntityRelationType
+    public abstract class EntityType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
+        : IEntityType
         where TEntity : Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
         where TEntityAttribute : EntityAttribute<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
         where TEntityAttributeType : EntityAttributeType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
@@ -26,27 +23,23 @@ namespace Dynamic.Models
     {
         #region Fields
 
-        public long Id { get; set; }
-        public long ToClassId { get; set; }
+        public abstract long Id { get; set; }
         public string Name { get; set; }
 
         #endregion
 
         #region Relations
 
-        [ForeignKey(nameof(ToClassId))]
-        public EntityClass ToClass { get; set; }
-
         #endregion
 
         #region Collections
 
-        [InverseProperty(nameof(IEntityRelation.RelationType))]
-        public ICollection<TEntityRelation> Relations { get; set; } = new List<TEntityRelation>();
+        [InverseProperty(nameof(IEntity.Type))]
+        public ICollection<TEntity> Entities { get; set; } = new List<TEntity>();
 
-        IEnumerable<IEntityRelation> IEntityRelationType.Relations
+        IEnumerable<IEntity> IEntityType.Entities
         {
-            get { return Relations?.AsEnumerable<IEntityRelation>(); }
+            get { return Entities?.AsEnumerable<IEntity>(); }
         }
 
         #endregion

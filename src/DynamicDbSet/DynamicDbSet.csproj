@@ -7,8 +7,8 @@
     <ProjectGuid>{C0BDE508-5810-4BA6-B907-50EF3A4CF146}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dynamic</RootNamespace>
-    <AssemblyName>Dynamic</AssemblyName>
+    <RootNamespace>DynamicDbSet</RootNamespace>
+    <AssemblyName>DynamicDbSet</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

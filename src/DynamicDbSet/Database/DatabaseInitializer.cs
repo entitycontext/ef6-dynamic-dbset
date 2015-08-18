@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace Dynamic.Database
+namespace DynamicDbSet.Database
 {
     public class DatabaseInitializer : CreateDatabaseIfNotExists<DatabaseContext>
     {

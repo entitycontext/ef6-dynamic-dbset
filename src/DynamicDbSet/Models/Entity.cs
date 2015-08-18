@@ -2,15 +2,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Dynamic.Models
+namespace DynamicDbSet.Models
 {
     public interface IEntity
     {
         long Id { get; set; }
-        long SetId { get; set; }
         long TypeId { get; set; }
 
-        EntityClass Class { get; set; }
         IEntityType Type { get; set; }
 
         IEnumerable<IEntityAttribute> Attributes { get; }
@@ -28,16 +26,12 @@ namespace Dynamic.Models
     {
         #region Fields
 
-        public long Id { get; set; }
-        public long SetId { get; set; }
-        public long TypeId { get; set; }
+        public abstract long Id { get; set; }
+        public abstract long TypeId { get; set; }
 
         #endregion
 
         #region Relations
-
-        [ForeignKey(nameof(SetId))]
-        public EntityClass Class { get; set; }
 
         [ForeignKey(nameof(TypeId))]
         TEntityType Type { get; set; }

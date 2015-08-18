@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Dynamic.Database
+namespace DynamicDbSet.Database
 {
     public class EntitySet<TEntity> :
         IQueryable<TEntity>, IQueryable,

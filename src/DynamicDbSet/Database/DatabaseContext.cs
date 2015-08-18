@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-using Dynamic.Models;
+using DynamicDbSet.Models;
 
-namespace Dynamic.Database
+namespace DynamicDbSet.Database
 {
     public class DatabaseContext : DbContext
     {

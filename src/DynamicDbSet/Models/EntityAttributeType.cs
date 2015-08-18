@@ -2,18 +2,21 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Dynamic.Models
+namespace DynamicDbSet.Models
 {
-    public interface IEntityType
+    public interface IEntityAttributeType
     {
         long Id { get; set; }
+        long? RelationTypeId { get; set; }
         string Name { get; set; }
 
-        IEnumerable<IEntity> Entities { get; }
+        IEntityRelationType RelationType { get; set; }
+
+        IEnumerable<IEntityAttribute> Attributes { get; }
     }
 
-    public abstract class EntityType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        : IEntityType
+    public abstract class EntityAttributeType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
+        : IEntityAttributeType
         where TEntity : Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
         where TEntityAttribute : EntityAttribute<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
         where TEntityAttributeType : EntityAttributeType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
@@ -23,23 +26,33 @@ namespace Dynamic.Models
     {
         #region Fields
 
-        public long Id { get; set; }
+        public abstract long Id { get; set; }
+        public abstract long? RelationTypeId { get; set; }
         public string Name { get; set; }
 
         #endregion
 
         #region Relations
 
+        [ForeignKey(nameof(RelationTypeId))]
+        public TEntityRelationType RelationType { get; set; }
+
+        IEntityRelationType IEntityAttributeType.RelationType
+        {
+            get { return RelationType; }
+            set { RelationType = (TEntityRelationType)value; }
+        }
+
         #endregion
 
         #region Collections
 
-        [InverseProperty(nameof(IEntity.Type))]
-        public ICollection<TEntity> Entities { get; set; } = new List<TEntity>();
+        [InverseProperty(nameof(IEntityAttribute.Type))]
+        public ICollection<TEntityAttribute> Attributes { get; set; } = new List<TEntityAttribute>();
 
-        IEnumerable<IEntity> IEntityType.Entities
+        IEnumerable<IEntityAttribute> IEntityAttributeType.Attributes
         {
-            get { return Entities?.AsEnumerable<IEntity>(); }
+            get { return Attributes?.AsEnumerable<IEntityAttribute>(); }
         }
 
         #endregion

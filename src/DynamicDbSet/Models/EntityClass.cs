@@ -1,4 +1,4 @@
-﻿namespace Dynamic.Models
+﻿namespace DynamicDbSet.Models
 {
     public class EntityClass
     {

@@ -3,9 +3,9 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 
-using Dynamic.Models;
+using DynamicDbSet.Models;
 
-namespace Dynamic.Database
+namespace DynamicDbSet.Database
 {
     public class EntityModel
     {
