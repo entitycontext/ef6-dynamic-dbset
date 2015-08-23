@@ -71,8 +71,8 @@
     <Compile Include="Database\DatabaseSettings.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="Database\EntityClassMap.cs" />
-    <Compile Include="Database\EntityModel.cs" />
-    <Compile Include="Database\EntitySet.cs" />
+    <Compile Include="Database\EntityDbModel.cs" />
+    <Compile Include="Database\EntityDbSet.cs" />
     <Compile Include="Database\EntitySqlGenerator.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\EntityAttribute.cs" />

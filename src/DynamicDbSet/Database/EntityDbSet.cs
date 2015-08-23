@@ -7,14 +7,14 @@ using System.Linq.Expressions;
 
 namespace DynamicDbSet.Database
 {
-    public class EntitySet<TEntity> :
+    public class EntityDbSet<TEntity> :
         IQueryable<TEntity>, IQueryable,
         IEnumerable<TEntity>, IEnumerable
     {
         private dynamic _DynamicSet;
         private DbSet _DbSet;
 
-        public EntitySet(
+        public EntityDbSet(
             object dynamicSet,
             DbSet dbSet)
         {

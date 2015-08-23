@@ -34,7 +34,7 @@ namespace DynamicDbSet.Tests
                 }
             }
 
-            DatabaseContext.RefreshEntityModel();
+            DatabaseContext.RebuildDbModel();
 
             //
             // Create entity attribute types and relation types.

@@ -7,14 +7,14 @@ using DynamicDbSet.Models;
 
 namespace DynamicDbSet.Database
 {
-    public class EntityModel
+    public class EntityDbModel
     {
         private DbCompiledModel _CompiledModel;
         private EntityClassMap _EntityClassMap;
         private string _NameSpace;
         private string _AssemblyName;
 
-        public EntityModel(
+        public EntityDbModel(
             string nameSpace,
             string assemblyName)
         {
@@ -75,7 +75,7 @@ namespace DynamicDbSet.Database
             return (TEntity)Activator.CreateInstance(entityType);
         }
 
-        private EntitySet<TEntity> GetEntitySet<TEntity>(
+        private EntityDbSet<TEntity> GetEntityDbSet<TEntity>(
             DatabaseContext db,
             Type entityType)
         {
@@ -84,7 +84,7 @@ namespace DynamicDbSet.Database
                 .MakeGenericMethod(entityType)
                 .Invoke(db, new object[0]);
 
-            return new EntitySet<TEntity>(dynamicSet, db.Set(entityType));
+            return new EntityDbSet<TEntity>(dynamicSet, db.Set(entityType));
         }
 
         //
@@ -97,11 +97,11 @@ namespace DynamicDbSet.Database
             return CreateEntity<IEntity>(_EntityClassMap.Entities[className]);
         }
 
-        public EntitySet<IEntity> Entities(
+        public EntityDbSet<IEntity> Entities(
             DatabaseContext db,
             string className)
         {
-            return GetEntitySet<IEntity>(db, _EntityClassMap.Entities[className]);
+            return GetEntityDbSet<IEntity>(db, _EntityClassMap.Entities[className]);
         }
 
         //
@@ -114,11 +114,11 @@ namespace DynamicDbSet.Database
             return CreateEntity<IEntityAttribute>(_EntityClassMap.EntityAttributes[className]);
         }
 
-        public EntitySet<IEntityAttribute> EntityAttributes(
+        public EntityDbSet<IEntityAttribute> EntityAttributes(
             DatabaseContext db,
             string className)
         {
-            return GetEntitySet<IEntityAttribute>(db, _EntityClassMap.EntityAttributes[className]);
+            return GetEntityDbSet<IEntityAttribute>(db, _EntityClassMap.EntityAttributes[className]);
         }
         
         //
@@ -131,11 +131,11 @@ namespace DynamicDbSet.Database
             return CreateEntity<IEntityAttributeType>(_EntityClassMap.EntityAttributeTypes[className]);
         }
 
-        public EntitySet<IEntityAttributeType> EntityAttributeTypes(
+        public EntityDbSet<IEntityAttributeType> EntityAttributeTypes(
             DatabaseContext db,
             string className)
         {
-            return GetEntitySet<IEntityAttributeType>(db, _EntityClassMap.EntityAttributeTypes[className]);
+            return GetEntityDbSet<IEntityAttributeType>(db, _EntityClassMap.EntityAttributeTypes[className]);
         }
         
         //
@@ -148,11 +148,11 @@ namespace DynamicDbSet.Database
             return CreateEntity<IEntityRelation>(_EntityClassMap.EntityRelations[className]);
         }
 
-        public EntitySet<IEntityRelation> EntityRelations(
+        public EntityDbSet<IEntityRelation> EntityRelations(
             DatabaseContext db,
             string className)
         {
-            return GetEntitySet<IEntityRelation>(db, _EntityClassMap.EntityRelations[className]);
+            return GetEntityDbSet<IEntityRelation>(db, _EntityClassMap.EntityRelations[className]);
         }
         
         //
@@ -165,11 +165,11 @@ namespace DynamicDbSet.Database
             return CreateEntity<IEntityRelationType>(_EntityClassMap.EntityRelationTypes[className]);
         }
 
-        public EntitySet<IEntityRelationType> EntityRelationTypes(
+        public EntityDbSet<IEntityRelationType> EntityRelationTypes(
             DatabaseContext db,
             string className)
         {
-            return GetEntitySet<IEntityRelationType>(db, _EntityClassMap.EntityRelationTypes[className]);
+            return GetEntityDbSet<IEntityRelationType>(db, _EntityClassMap.EntityRelationTypes[className]);
         }
     }
 }

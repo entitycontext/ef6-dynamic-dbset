@@ -20,11 +20,11 @@ namespace DynamicDbSet.Database
         static DatabaseContext()
         {
             System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
-            RefreshEntityModel();           
+            RebuildDbModel();           
         }
 
         public DatabaseContext()
-            : base(_EntityModel.CompiledModel)
+            : base(_EntityDbModel.CompiledModel)
         {
             ConfigureContext();
         }
@@ -42,14 +42,14 @@ namespace DynamicDbSet.Database
             Configuration.ProxyCreationEnabled = false;
         }
 
-        private static EntityModel _EntityModel = new EntityModel("DynamicDbSet.Models", "DynamicDbSet.Models.Runtime");
+        private static EntityDbModel _EntityDbModel = new EntityDbModel("DynamicDbSet.Models", "DynamicDbSet.Models.Runtime");
 
-        public static void RefreshEntityModel()
+        public static void RebuildDbModel()
         {
             var modelBuilder = new DbModelBuilder();
             modelBuilder.RegisterEntityType(typeof(EntityClass));
             ConfigureModel(modelBuilder);
-            _EntityModel.Compile(modelBuilder);
+            _EntityDbModel.Compile(modelBuilder);
         }
 
         protected override void OnModelCreating(
@@ -92,13 +92,13 @@ namespace DynamicDbSet.Database
         public IEntity CreateEntity(
             string className)
         {
-            return _EntityModel.CreateEntity(className);
+            return _EntityDbModel.CreateEntity(className);
         }
 
-        public EntitySet<IEntity> Entities(
+        public EntityDbSet<IEntity> Entities(
             string className)
         {
-            return _EntityModel.Entities(this, className);
+            return _EntityDbModel.Entities(this, className);
         }
 
         //
@@ -108,13 +108,13 @@ namespace DynamicDbSet.Database
         public IEntityAttribute CreateEntityAttribute(
             string className)
         {
-            return _EntityModel.CreateEntityAttribute(className);
+            return _EntityDbModel.CreateEntityAttribute(className);
         }
 
-        public EntitySet<IEntityAttribute> EntityAttributes(
+        public EntityDbSet<IEntityAttribute> EntityAttributes(
             string className)
         {
-            return _EntityModel.EntityAttributes(this, className);
+            return _EntityDbModel.EntityAttributes(this, className);
         }
 
         //
@@ -124,13 +124,13 @@ namespace DynamicDbSet.Database
         public IEntityAttributeType CreateEntityAttributeType(
             string className)
         {
-            return _EntityModel.CreateEntityAttributeType(className);
+            return _EntityDbModel.CreateEntityAttributeType(className);
         }
 
-        public EntitySet<IEntityAttributeType> EntityAttributeTypes(
+        public EntityDbSet<IEntityAttributeType> EntityAttributeTypes(
             string className)
         {
-            return _EntityModel.EntityAttributeTypes(this, className);
+            return _EntityDbModel.EntityAttributeTypes(this, className);
         }
 
         //
@@ -140,13 +140,13 @@ namespace DynamicDbSet.Database
         public IEntityRelation CreateEntityRelation(
             string className)
         {
-            return _EntityModel.CreateEntityRelation(className);
+            return _EntityDbModel.CreateEntityRelation(className);
         }
 
-        public EntitySet<IEntityRelation> EntityRelations(
+        public EntityDbSet<IEntityRelation> EntityRelations(
             string className)
         {
-            return _EntityModel.EntityRelations(this, className);
+            return _EntityDbModel.EntityRelations(this, className);
         }
 
         //
@@ -156,13 +156,13 @@ namespace DynamicDbSet.Database
         public IEntityRelationType CreateEntityRelationType(
             string className)
         {
-            return _EntityModel.CreateEntityRelationType(className);
+            return _EntityDbModel.CreateEntityRelationType(className);
         }
 
-        public EntitySet<IEntityRelationType> EntityRelationTypes(
+        public EntityDbSet<IEntityRelationType> EntityRelationTypes(
             string className)
         {
-            return _EntityModel.EntityRelationTypes(this, className);
+            return _EntityDbModel.EntityRelationTypes(this, className);
         }
 
         #endregion
