@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace DynamicDbSet.Database
         public Dictionary<string, Type> EntityAttributeTypes = new Dictionary<string, Type>();
         public Dictionary<string, Type> EntityRelations = new Dictionary<string, Type>();
         public Dictionary<string, Type> EntityRelationTypes = new Dictionary<string, Type>();
-        public Dictionary<string, Type> EntityTypes = new Dictionary<string, Type>();
 
         private EntityClassMap()
         {
@@ -41,23 +41,20 @@ namespace DynamicDbSet.Database
             {
                 var name = entityClass.Name;
 
-                code += 
+                code +=
                     $@"
-                    public class {name} : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
+                    public class {name} : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType> 
                     {{                        
                         [Key, Column(""{name}Id"")]
                         public override long Id {{ get; set; }}
-
-                        [Column(""{name}TypeId"")]
-                        public override long TypeId {{ get; set; }}
                     }}
 
-                    public class {name}Attribute : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
+                    public class {name}Attribute : EntityAttribute<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType> 
                     {{
                         [Key, Column(""{name}AttributeId"")]
                         public override long Id {{ get; set; }}
 
-                        [Column(""{name}TypeId"")]
+                        [Column(""{name}AttributeTypeId"")]
                         public override long TypeId {{ get; set; }}
 
                         [Column(""{name}Id"")]
@@ -67,7 +64,7 @@ namespace DynamicDbSet.Database
                         public override long? RelationId {{ get; set; }}
                     }}
 
-                    public class {name}AttributeType : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
+                    public class {name}AttributeType : EntityAttributeType<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType> 
                     {{
                         [Key, Column(""{name}AttributeTypeId"")]
                         public override long Id {{ get; set; }}
@@ -76,7 +73,7 @@ namespace DynamicDbSet.Database
                         public override long? RelationTypeId {{ get; set; }}
                     }}
 
-                    public class {name}Relation : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
+                    public class {name}Relation : EntityRelation<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType> 
                     {{
                         [Key, Column(""{name}RelationId"")]
                         public override long Id {{ get; set; }}
@@ -85,24 +82,19 @@ namespace DynamicDbSet.Database
                         public override long EntityId {{ get; set; }}
 
                         [Column(""{name}RelationTypeId"")]
-                        public override long RelationTypeId {{ get; set; }}
+                        public override long TypeId {{ get; set; }}
                     }}
 
-                    public class {name}RelationType : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
+                    public class {name}RelationType : EntityRelationType<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType> 
                     {{
                         [Key, Column(""{name}RelationTypeId"")]
-                        public override long Id {{ get; set; }}
-                    }}
-
-                    public class {name}Type : Entity<{name}, {name}Attribute, {name}AttributeType, {name}Relation, {name}RelationType, {name}Type> 
-                    {{
-                        [Key, Column(""{name}TypeId"")]
                         public override long Id {{ get; set; }}
                     }}";
             }
 
             code = 
                 $@"
+                using System.ComponentModel.DataAnnotations;
                 using System.ComponentModel.DataAnnotations.Schema;
 
                 namespace {nameSpace} 
@@ -120,6 +112,7 @@ namespace DynamicDbSet.Database
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IEntity).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(KeyAttribute).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(ColumnAttribute).Assembly.Location)
             };
 
@@ -165,7 +158,6 @@ namespace DynamicDbSet.Database
                 classMap.EntityAttributeTypes[name] = assembly.GetType($"{nameSpace}.{name}AttributeType");
                 classMap.EntityRelations[name] = assembly.GetType($"{nameSpace}.{name}Relation");
                 classMap.EntityRelationTypes[name] = assembly.GetType($"{nameSpace}.{name}RelationType");
-                classMap.EntityTypes[name] = assembly.GetType($"{nameSpace}.{name}Type");
             }
 
             return classMap;

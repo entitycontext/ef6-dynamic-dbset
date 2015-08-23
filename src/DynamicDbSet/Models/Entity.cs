@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -7,40 +8,29 @@ namespace DynamicDbSet.Models
     public interface IEntity
     {
         long Id { get; set; }
-        long TypeId { get; set; }
-
-        IEntityType Type { get; set; }
+        string Name { get; set; }
 
         IEnumerable<IEntityAttribute> Attributes { get; }
         IEnumerable<IEntityRelation> Relations { get; }
     }
 
-    public abstract class Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
+    public abstract class Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
         : IEntity
-        where TEntity : Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        where TEntityAttribute : EntityAttribute<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        where TEntityAttributeType : EntityAttributeType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        where TEntityRelation : EntityRelation<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        where TEntityRelationType : EntityRelationType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
-        where TEntityType : EntityType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType, TEntityType>
+        where TEntity : Entity<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
+        where TEntityAttribute : EntityAttribute<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
+        where TEntityAttributeType : EntityAttributeType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
+        where TEntityRelation : EntityRelation<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
+        where TEntityRelationType : EntityRelationType<TEntity, TEntityAttribute, TEntityAttributeType, TEntityRelation, TEntityRelationType>
     {
         #region Fields
 
         public abstract long Id { get; set; }
-        public abstract long TypeId { get; set; }
+        [Required, MaxLength(255)]
+        public string Name { get; set; }
 
         #endregion
 
         #region Relations
-
-        [ForeignKey(nameof(TypeId))]
-        TEntityType Type { get; set; }
-
-        IEntityType IEntity.Type
-        {
-            get { return Type; }
-            set { Type = (TEntityType)value; }
-        }
 
         #endregion
 

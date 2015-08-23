@@ -52,6 +52,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reflection.Metadata, Version=1.0.21.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
@@ -66,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseContext.cs" />
+    <Compile Include="Database\DatabaseExtensions.cs" />
+    <Compile Include="Database\DatabaseSettings.cs" />
+    <Compile Include="Database\EntitySchema.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="Database\EntityClassMap.cs" />
     <Compile Include="Database\EntityModel.cs" />
@@ -76,7 +80,6 @@
     <Compile Include="Models\EntityClass.cs" />
     <Compile Include="Models\EntityRelation.cs" />
     <Compile Include="Models\EntityRelationType.cs" />
-    <Compile Include="Models\EntityType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

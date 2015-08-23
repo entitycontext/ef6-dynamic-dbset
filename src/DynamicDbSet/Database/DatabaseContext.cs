@@ -1,5 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
 
 using DynamicDbSet.Models;
 
@@ -9,7 +11,7 @@ namespace DynamicDbSet.Database
     {
         #region Entities
 
-        public IDbSet<EntityClass> EntityClasses { get; set; }
+        public DbSet<EntityClass> EntityClasses { get; set; }
 
         #endregion
 
@@ -18,6 +20,7 @@ namespace DynamicDbSet.Database
         static DatabaseContext()
         {
             System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
+            RefreshEntityModel();           
         }
 
         public DatabaseContext()
@@ -39,11 +42,12 @@ namespace DynamicDbSet.Database
             Configuration.ProxyCreationEnabled = false;
         }
 
-        private static EntityModel _EntityModel = new EntityModel("Dynamic.Models", "Dynamic.Models.Runtime");
+        private static EntityModel _EntityModel = new EntityModel("DynamicDbSet.Models", "DynamicDbSet.Models.Runtime");
 
-        public static void RefreshModel()
+        public static void RefreshEntityModel()
         {
             var modelBuilder = new DbModelBuilder();
+            modelBuilder.RegisterEntityType(typeof(EntityClass));
             ConfigureModel(modelBuilder);
             _EntityModel.Compile(modelBuilder);
         }
@@ -57,6 +61,7 @@ namespace DynamicDbSet.Database
         private static void ConfigureModel(
             DbModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema(DatabaseSettings.SchemaName);
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
@@ -64,6 +69,20 @@ namespace DynamicDbSet.Database
         #endregion
 
         #region Dynamic Entities
+
+        public void GenerateEntityClass(
+            EntityClass entityClass)
+        {
+            if (EntityClasses.Any(o => o.Name == entityClass.Name))
+            {
+                throw new Exception($"Entity class with name {entityClass.Name} already exists.");
+            }
+
+            EntitySchema.CreateEntityTables(Database, DatabaseSettings.SchemaName, entityClass.Name);
+
+            EntityClasses.Add(entityClass);
+            SaveChanges();
+        }
 
         //
         // Entity
@@ -145,21 +164,6 @@ namespace DynamicDbSet.Database
             return _EntityModel.EntityRelationTypes(this, className);
         }
 
-        //
-        // EntityType
-        //
-
-        public IEntityType CreateEntityType(
-            string className)
-        {
-            return _EntityModel.CreateEntityType(className);
-        }
-
-        public EntitySet<IEntityType> EntityTypes(
-            string className)
-        {
-            return _EntityModel.EntityTypes(this, className);
-        }
         #endregion
     }
 }

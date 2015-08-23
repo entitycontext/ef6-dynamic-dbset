@@ -56,7 +56,6 @@ namespace DynamicDbSet.Database
                     modelBuilder.RegisterEntityType(entityClassMap.EntityAttributeTypes[name]);
                     modelBuilder.RegisterEntityType(entityClassMap.EntityRelations[name]);
                     modelBuilder.RegisterEntityType(entityClassMap.EntityRelationTypes[name]);
-                    modelBuilder.RegisterEntityType(entityClassMap.EntityTypes[name]);
                 }
 
                 //
@@ -171,23 +170,6 @@ namespace DynamicDbSet.Database
             string className)
         {
             return GetEntitySet<IEntityRelationType>(db, _EntityClassMap.EntityRelationTypes[className]);
-        }
-        
-        //
-        // EntityType
-        //
-
-        public IEntityType CreateEntityType(
-            string className)
-        {
-            return CreateEntity<IEntityType>(_EntityClassMap.EntityTypes[className]);
-        }
-
-        public EntitySet<IEntityType> EntityTypes(
-            DatabaseContext db,
-            string className)
-        {
-            return GetEntitySet<IEntityType>(db, _EntityClassMap.EntityTypes[className]);
         }
     }
 }
