@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using NUnit.Framework;
 
@@ -27,10 +26,7 @@ namespace DynamicDbSet.Tests
 
             using (var db = new DatabaseContext())
             {
-                if (db.EntityClasses.Any())
-                {
-                    db.Database.Delete();
-                }
+                db.Database.Delete();
 
                 foreach (var entityClass in entityClasses.Values)
                 {
@@ -173,7 +169,6 @@ namespace DynamicDbSet.Tests
             }
         }
 
-#if TODO
         [TearDown]
         public void Teardown()
         {
@@ -182,6 +177,5 @@ namespace DynamicDbSet.Tests
                 db.Database.Delete();
             }
         }
-#endif
     }
 }

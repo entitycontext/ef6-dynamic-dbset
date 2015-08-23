@@ -69,11 +69,11 @@
     <Compile Include="Database\DatabaseContext.cs" />
     <Compile Include="Database\DatabaseExtensions.cs" />
     <Compile Include="Database\DatabaseSettings.cs" />
-    <Compile Include="Database\EntitySchema.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="Database\EntityClassMap.cs" />
     <Compile Include="Database\EntityModel.cs" />
     <Compile Include="Database\EntitySet.cs" />
+    <Compile Include="Database\EntitySqlGenerator.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\EntityAttribute.cs" />
     <Compile Include="Models\EntityAttributeType.cs" />

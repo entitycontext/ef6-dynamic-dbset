@@ -78,7 +78,8 @@ namespace DynamicDbSet.Database
                 throw new Exception($"Entity class with name {entityClass.Name} already exists.");
             }
 
-            EntitySchema.CreateEntityTables(Database, DatabaseSettings.SchemaName, entityClass.Name);
+            var createTableSql = EntitySqlGenerator.GenerateCreateTables(entityClass.Name);
+            Database.ExecuteSqlCommand(createTableSql);
 
             EntityClasses.Add(entityClass);
             SaveChanges();
