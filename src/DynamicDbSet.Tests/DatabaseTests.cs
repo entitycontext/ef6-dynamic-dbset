@@ -6,6 +6,10 @@ using DynamicDbSet.Database;
 
 namespace DynamicDbSet.Tests
 {
+    //
+    // NOTE: SetupDatabase is configured as the setup/teardown fixture class, so that code is run before/after these tests.
+    //
+
     [TestFixture]
     public class DatabaseTests
     {

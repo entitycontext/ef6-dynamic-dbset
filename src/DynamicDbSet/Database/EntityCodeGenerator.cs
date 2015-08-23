@@ -13,7 +13,7 @@ using DynamicDbSet.Models;
 
 namespace DynamicDbSet.Database
 {
-    public class EntityClassMap
+    public class EntityCodeGenerator
     {
         public Dictionary<string, Type> Entities = new Dictionary<string, Type>();
         public Dictionary<string, Type> EntityAttributes = new Dictionary<string, Type>();
@@ -21,16 +21,16 @@ namespace DynamicDbSet.Database
         public Dictionary<string, Type> EntityRelations = new Dictionary<string, Type>();
         public Dictionary<string, Type> EntityRelationTypes = new Dictionary<string, Type>();
 
-        private EntityClassMap()
+        private EntityCodeGenerator()
         {
         }
 
-        public static EntityClassMap Create(
+        public static EntityCodeGenerator Create(
             string nameSpace,
             string assemblyName,
             IEnumerable<EntityClass> entityClasses)
         {
-            var classMap = new EntityClassMap();
+            var generator = new EntityCodeGenerator();
 
             //
             // Generate code for entity classes.
@@ -153,14 +153,14 @@ namespace DynamicDbSet.Database
             {
                 var name = entityClass.Name;
 
-                classMap.Entities[name] = assembly.GetType($"{nameSpace}.{name}");
-                classMap.EntityAttributes[name] = assembly.GetType($"{nameSpace}.{name}Attribute");
-                classMap.EntityAttributeTypes[name] = assembly.GetType($"{nameSpace}.{name}AttributeType");
-                classMap.EntityRelations[name] = assembly.GetType($"{nameSpace}.{name}Relation");
-                classMap.EntityRelationTypes[name] = assembly.GetType($"{nameSpace}.{name}RelationType");
+                generator.Entities[name] = assembly.GetType($"{nameSpace}.{name}");
+                generator.EntityAttributes[name] = assembly.GetType($"{nameSpace}.{name}Attribute");
+                generator.EntityAttributeTypes[name] = assembly.GetType($"{nameSpace}.{name}AttributeType");
+                generator.EntityRelations[name] = assembly.GetType($"{nameSpace}.{name}Relation");
+                generator.EntityRelationTypes[name] = assembly.GetType($"{nameSpace}.{name}RelationType");
             }
 
-            return classMap;
+            return generator;
         }
     }
 }

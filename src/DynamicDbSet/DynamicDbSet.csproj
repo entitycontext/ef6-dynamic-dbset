@@ -70,7 +70,7 @@
     <Compile Include="Database\DatabaseExtensions.cs" />
     <Compile Include="Database\DatabaseSettings.cs" />
     <Compile Include="Database\DatabaseInitializer.cs" />
-    <Compile Include="Database\EntityClassMap.cs" />
+    <Compile Include="Database\EntityCodeGenerator.cs" />
     <Compile Include="Database\EntityDbModel.cs" />
     <Compile Include="Database\EntityDbSet.cs" />
     <Compile Include="Database\EntitySqlGenerator.cs" />
